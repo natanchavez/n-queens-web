@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>No title</title>
+</head>
+<body>
+<!--/*  Head content  */-->
+<th:block th:fragment="header">
+	<meta charset="UTF-8" content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+	<link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"/>
+	<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	<link href="/webjars/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
+	<link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</th:block>
+<!--/*  Top navigation bar  */-->
+<th:block th:fragment="navbar">
+	<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+		<div class="navbar-brand">
+            <span>
+                <i class="fas fa-crown" id="queen-annotation"></i>&nbsp;n-Reinas
+            </span>
+		</div>
+		<button class="navbar-toggler btn-sm" data-target="#navbarNav" data-toggle="collapse" type="button">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link navbar-link" href="/"
+					   th:classappend="${#httpServletRequest.requestURI == '/'} ? 'current-page active'">
+						Inicio
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link navbar-link" href="/chessboard"
+					   th:classappend="${#httpServletRequest.requestURI == '/chessboard'} ? 'current-page active'">
+						Simulador
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link navbar-link" href="/theory"
+					   th:classappend="${#httpServletRequest.requestURI == '/theory'} ? 'current-page active'">
+						Teoría
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link navbar-link" href="/about"
+					   th:classappend="${#httpServletRequest.requestURI == '/about'} ? 'current-page active'">
+						Acerca de
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+</th:block>
+<!--/* Jumbotron */-->
+<th:block th:fragment="jumbotron">
+	<div class="card card-image p-5" id="jumbotron-container">
+		<div class="text-center">
+			<div class="container p-2 p-sm-5" id="header-text-container">
+				<!--/* Title */-->
+				<h3 id="header-text">El problema de las n-reinas</h3>
+			</div>
+		</div>
+	</div>
+</th:block>
+<!--/*  Go to top button  */-->
+<th:block th:fragment="go-to-top">
+	<a class="btn btn-primary" href="#" id="go-to-top-btn">
+		<i class="fas fa-chevron-up"></i>
+	</a>
+</th:block>
+<!--/*  Footer  */-->
+<th:block th:fragment="footer">
+	<footer class="bg-dark d-flex justify-content-center mt-auto">
+		<div class="text-center py-1">
+			<a class="mx-auto" href="">Developed by 「ナタナエル」</a>
+		</div>
+	</footer>
+</th:block>
+</body>
+</html>

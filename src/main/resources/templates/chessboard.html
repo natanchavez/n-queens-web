@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:insert="fragments/elements :: header"/>
+	<title>Tablero de ajedrez</title>
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+	<!--/*  Main Content  */-->
+	<div id="content">
+		<!--/*  Top navigation bar  */-->
+		<th:block th:replace="fragments/elements :: navbar"/>
+		<!--/*  Number selectors section  */-->
+		<div class="d-flex flex-column flex-md-row justify-content-center mt-3 mx-3">
+			<!--/*  Number of queens selector  */-->
+			<form action="/get-all-solutions" class="d-flex flex-row align-items-center" id="chess-form">
+				<label class="col-form-label option-label w-100" for="select-queens-list">
+					Reinas&nbsp;en&nbsp;el&nbsp;tablero:&nbsp;</label>
+				<select class="custom-select custom-select-sm w-100" id="select-queens-list" name="numOfQueens">
+					<option th:each="numOfQueens:${#numbers.sequence(1, maxNumberOfQueens)}"
+							th:selected="${numOfQueens == 8}" th:text="${numOfQueens}"
+							th:value="${numOfQueens}"></option>
+				</select>
+			</form>
+			<!--/*  Number of solution selector  */-->
+			<div class="d-flex flex-row align-items-center mx-md-4">
+				<label class="col-form-label option-label w-100"
+					   for="solutions-list">Mostrar&nbsp;solución:&nbsp;</label>
+				<select class="custom-select custom-select-sm w-100" id="solutions-list">
+					<option disabled hidden selected value="">----</option>
+				</select>
+			</div>
+			<!--/*  Number of solutions found  */-->
+			<div class="d-flex flex-row align-items-center">
+				<label class="col-form-label option-label w-100"
+					   for="solutions-list">Soluciones&nbsp;encontradas:&nbsp;</label>
+				<label class="col-form-label w-100" id="num-results-label">2680</label>
+			</div>
+		</div>
+		<!--/*  Chessboard and annotations section  */-->
+		<div class="row no-gutters justify-content-center main-content">
+			<!--/*  Chessboard panel  */-->
+			<div class="board-container col-md-7 col-lg-5">
+				<th:block th:each="boardSize : ${#numbers.sequence(1, maxNumberOfQueens)}">
+					<div class="square" th:id="'board-'+${boardSize}">
+						<table class="square-content">
+							<!--/*  Rank  */-->
+							<tr th:class="${currentRank == -1 || currentRank == boardSize} ? 'border-rank' : 'board-rank'"
+								th:each="currentRank:${#numbers.sequence(-1,boardSize)}">
+								<!--/*  Rank label left  */-->
+								<th class="rank-label tile square-relative-container" th:with="rankNumber=${boardSize}">
+									<div class="absolute-container-left"
+										 th:if="${currentRank < boardSize && currentRank > -1}"
+										 th:utext="${rankNumber - currentRank}"></div>
+								</th>
+								<!--/*  File - chessboard square  */-->
+								<td class="tile" th:each="currentFile:${#numbers.sequence(1,boardSize)}"
+									th:if="${currentRank < boardSize && currentRank > -1}"
+									th:style="${currentFile+currentRank}%2==0 ? 'background: #212121' : 'background: #EEEEEE'">
+									<!--/*  Queen piece and cross mark icons  */-->
+									<div class="square-relative-container">
+										<i class="fas fa-crown queen-icon"
+										   th:id="'board-'+${boardSize}+'-square-'+${currentRank + 1}+'-'+${currentFile}">
+										</i>
+										<i class="fas fa-times queen-attack-icon"
+										   th:id="'board-' + ${boardSize} + '-square-' +
+                                   ${currentRank + 1} + '-' + ${currentFile} + '-attack'"></i>
+									</div>
+								</td>
+								<!--/*  File label top and bottom  */-->
+								<th class="file-label tile square-relative-container"
+									th:each="currentFile:${#numbers.sequence(1,boardSize)}"
+									th:if="${currentRank == boardSize || currentRank == -1}">
+									<div class="absolute-container-top" th:if="${currentRank == -1}"
+										 th:utext="${'&#'+__${asciiA}__+';'}"
+										 th:with="asciiA=65 + ${currentFile - 1}"></div>
+									<div class="absolute-container-bottom" th:if="${currentRank == boardSize}"
+										 th:utext="${'&#'+__${asciiA}__+';'}"
+										 th:with="asciiA=65 + ${currentFile - 1}"></div>
+								</th>
+								<!--/*  Rank label right  */-->
+								<th class="rank-label tile square-relative-container" th:with="rankNumber=${boardSize}">
+									<div class="absolute-container-right"
+										 th:if="${currentRank < boardSize && currentRank > -1}"
+										 th:utext="${rankNumber - currentRank}"></div>
+								</th>
+							</tr>
+						</table>
+					</div>
+				</th:block>
+			</div>
+			<!--/*  Annotations panel  */-->
+			<div class="board-container annotations-container col-lg-5">
+				<div class="annotations-text">
+					<h4 id="annotations-title">Notas:</h4>
+					<ul>
+						<li>
+							<p>
+								Este simulador permite encontrar todas las soluciones al problema de las n-reinas
+								mediante el uso del algoritmo "vuelta atrás" (backtracking).
+							</p>
+						</li>
+						<li>
+							<p>
+								Un tablero siempre tendrá el mismo número de filas que de columnas y dicho número será
+								también la cantidad de reinas que debe haber en el tablero.
+							</p>
+						</li>
+						<li>
+							<p>
+								En un tablero no deben existir 2 reinas que se ataquen entre sí, si eso sucediera
+								entonces dicho tablero no es una solución.
+							</p>
+						</li>
+						<li>
+							<p>
+								<i class="fas fa-crown" id="queen-annotation"></i>
+								&nbsp;Este icono representa a la pieza de la reina,puedes darle clic para mostrar su
+								rango de ataque en el tablero.
+							</p>
+						</li>
+						<li>
+							<p>
+								<i class="fas fa-times" id="cross-annotation"></i>
+								&nbsp;Este icono indica que una casilla está dentro del rango de ataque de una reina,
+								por lo cual ninguna otra pieza puede ser colocada ahí.
+							</p>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!--/*  Footer fragment  */-->
+		<div th:replace="fragments/elements :: footer"></div>
+	</div>
+</div>
+<!--/*  Javascript file with Jquery  */-->
+<script th:src="@{/js/chess.js}" type="text/javascript"></script>
+</body>
+</html>

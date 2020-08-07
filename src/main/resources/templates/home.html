@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="fragments/elements :: header"/>
+	<title>n-reinas</title>
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+	<!--/*  Main Content  */-->
+	<div id="content">
+		<!--/*  Top navigation bar  */-->
+		<th:block th:replace="fragments/elements :: navbar"/>
+		<!--/* Jumbotron */-->
+		<th:block th:replace="fragments/elements :: jumbotron"/>
+		<!--/*  Main content  */-->
+		<div class="row no-gutters justify-content-center">
+			<div class="col-12 col-sm-9 p-0 p-sm-5">
+				<!--/*  Wikipedia cite  */-->
+				<div class="p-4 p-sm-5" id="text-container">
+					<p>
+						El propósito de este sitio es abordar el problema de las “n-reinas” el cual a grandes rasgos
+						trata de lo siguiente:
+					</p>
+					<!--/*  Cite container  */-->
+					<div class="m-4">
+						<!--/*  Cite  */-->
+						<p>
+							El problema de las ocho reinas es un pasatiempo que consiste en poner ocho reinas en el
+							tablero de ajedrez sin que se amenacen. Fue propuesto por el ajedrecista alemán Max Bezzel
+							en 1848. En el juego del ajedrez la reina amenaza a aquellas piezas que se encuentren en su
+							misma fila, columna o diagonal. El juego de las 8 reinas consiste en poner sobre un tablero
+							de ajedrez ocho reinas sin que estas se amenacen entre ellas.
+						</p>
+						<!--/*  Citation on APA style  */-->
+						<div id="apa">Problema de las ocho reinas. (2020, 25 de junio). <i>
+							Wikipedia, La enciclopedia libre</i>. Fecha de consulta: 07:38, julio 18, 2020 desde
+							<a class="external free"
+							   href="https://es.wikipedia.org/w/index.php?title=Problema_de_las_ocho_reinas&amp;oldid=127216173">
+								https://es.wikipedia.org/w/index.php?title=Problema_de_las_ocho_reinas&amp;oldid=127216173
+							</a>.
+						</div>
+					</div>
+					<p>
+						Esta página cuenta con un simulador que buscará todas las posibles soluciones al problema antes
+						descrito y las mostrará de manera gráfica en un tablero de ajedrez. La utilidad del problema
+						antes mencionado es meramente teórica, ya que se hace uso de conceptos tales como el algoritmo
+						“vuelta atrás” así como también la comprensión de lo que implica la complejidad especifica para
+						un algoritmo (Big-O) y las repercusiones que conlleva la elección de un algoritmo de “fuerza
+						bruta” en comparación a otros que pueden realizar un menor numero de operaciones.
+					</p>
+					<p>
+						<a class="col-6 col-lg-3 btn btn-outline-primary" href="/chessboard">Ir al simulador</a>
+					</p>
+					<p>
+						<a class="col-6 col-lg-3 btn btn-outline-primary" href="/theory">Ir a la teoría</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<!--/*  Footer fragment  */-->
+		<div th:replace="fragments/elements :: footer"></div>
+	</div>
+</div>
+</body>
+</html>

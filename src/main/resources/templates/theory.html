@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:replace="fragments/elements :: header"/>
+	<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+	<script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+	<title>Teoría</title>
+</head>
+<body>
+<div class="wrapper d-flex align-items-stretch">
+	<!--/*  Main Content  */-->
+	<div id="content">
+		<!--/*  Top navigation bar  */-->
+		<th:block th:replace="fragments/elements :: navbar"/>
+		<!--/* Jumbotron */-->
+		<th:block th:replace="fragments/elements :: jumbotron"/>
+		<!--/*  n-queens theory text  */-->
+		<div class="row no-gutters justify-content-center">
+			<div class="col-12 col-sm-9 p-0 p-sm-5">
+				<div class="p-4 p-sm-5" id="text-container">
+					<h3>Introducción</h3>
+					<p>
+						El problema de las n-reinas consiste en visualizar un tablero de ajedrez el cual tendrá \(n\)
+						filas, \(n\) columnas, así como también \(n\) reinas, es decir, para un tablero de dimensiones
+						normales (8 filas por 8 columnas) tendremos 8 reinas posicionadas de tal manera que se cumpla la
+						siguiente regla:
+					</p>
+					<p class="m-4">
+						“Las \(n\) reinas deben colocarse en un tablero de \(n\times{n}\) de manera que no existan 2
+						reinas que se ataquen entre sí”
+					</p>
+					<p>
+						La complejidad del problema radica en encontrar todas las posibles permutaciones de tableros con
+						exactamente \(n\) reinas y que además satisfagan la condición inicial, para ello hay que
+						mencionar que la reina en ajedrez es la pieza más fuerte ya que su rango de ataque cubre toda
+						fila en la que se encuentra, toda la columna y ambas diagonales, es por ello por lo que de todos
+						los posibles tableros se descartarán aquellos que no cumplan con la regla ya mencionada.
+					</p>
+					<figure class="row no-gutters figure mx-auto d-block text-center">
+						<img alt="Rango de ataque de la reina" class="img-fluid col-12 col-lg-5" src=""
+							 th:src="@{/img/1.png}">
+						<figcaption class="figure-caption">Rango de ataque de la reina.</figcaption>
+					</figure>
+					<br>
+					<h3>Todas las posibles permutaciones</h3>
+					<p>
+						Para conocer cuantas posibilidades existen para un tablero de dimensiones \(n\times{n}\) podemos
+						representar a cada configuración de tableros como una matriz cuadrada pero que además sea
+						binaria, con lo cual podemos indicar la existencia de una reina con un 1 y la ausencia de ella
+						con un 0, así entonces se pueden calcular todas las configuraciones por medio de la fórmula de
+						permutación con repeticiones, la cual es \(PR(m,r)=m^{r}\) donde \(m\) será igual al número de
+						posibles valores en la matriz los cuales son 0 o 1, es decir, \(m=2\) y \(r\) será la cantidad
+						de elementos en la matriz, pero cómo se trata de una matriz cuadrada podemos decir que
+						\(r=n^{2}\) donde \(n\) es el valor definido por nosotros (según el número de reinas a buscar),
+						por lo tanto, la fórmula para cualquier tamaño de tablero será \(2^{n^{2}}\) , así por ejemplo
+						para el caso específico de \(n=2\) tendremos \(2^{n^{2}}=2^{2^{2}}=2^{4}=16\) posibles
+						permutaciones.
+					</p>
+					<figure class="row no-gutters figure mx-auto d-block text-center">
+						<img alt="Permutaciones para tablero 2 por 2" class="img-fluid col-12 col-lg-7" src=""
+							 th:src="@{/img/2.png}">
+						<figcaption class="figure-caption">Permutaciones posibles para un tablero de \(2\times{2}\)
+						</figcaption>
+					</figure>
+					<br>
+					<p>
+						En un tablero de ajedrez de \(n\times{n}\) tendremos \(2^{n^{2}}\) posibles permutaciones, por
+						lo cual para \(n=8\) tendremos \(2^{8^{2}}=2^{64}=18.446744\times{10^{18}}\) posibles
+						candidatos, esto sin considerar aun las restricciones de únicamente \(n\) reinas por tablero ni
+						tampoco el rango de ataque de cada una, así que por medio del uso de un algoritmo de fuerza
+						bruta tendríamos que evaluar cada uno de los \(2^{64}\) tableros para encontrar las 92
+						soluciones existentes para \(n=8\) , desde luego esto es increíblemente ineficiente ya que en
+						problemas de la vida cotidiana no es práctico utilizar métodos como estos para lidiar con
+						cantidades tan grandes, principalmente porque la complejidad de este tipo de algoritmo es de
+						\(O\big(2^{n^{2}}\big)\) lo cual es mayor que \(O\big(n^{2}\big)\) e incluso \(O\big(n!\big)\) .
+					</p>
+					<figure class="row no-gutters figure mx-auto d-block text-center">
+						<img alt="Gráfica comparativa big o" class="img-fluid col-12 col-lg-7" src=""
+							 th:src="@{/img/3.png}">
+						<figcaption class="figure-caption">Gráfica comparativa Big-O</figcaption>
+					</figure>
+					<br>
+					<h3>Fuerza bruta vs vuelta atrás</h3>
+					<p>
+						Habiendo visto la gran desventaja que implica tratar de encontrar todas las soluciones por medio
+						de un algoritmo de fuerza bruta entendemos que es necesario utilizar otro tipo de método que
+						tenga una menor complejidad, así que para afrontar este problema se puede considerar un
+						algoritmo de tipo “vuelta atrás” (backtracking), el cual a grandes rasgos no evaluará los
+						\(2^{64}\) posibles tableros, sino que comenzará colocando una reina en la primera fila, después
+						saltará a la siguiente y colocará otra pieza en un lugar que no afecte a todas las reinas ya
+						antes colocadas, y así sucesivamente, pero si en algún momento encuentra que en la fila actual
+						no puede colocar la pieza en ninguna casilla entonces retrocederá una fila y tomará la pieza ya
+						colocada ahí para moverla a la siguiente casilla dentro de esa misma fila y continuará así
+						buscando las soluciones siguiendo este proceso de avanzar y regresar sobre sus pasos, de ahí el
+						nombre de “vuelta atrás”. Cabe mencionar que para este problema y con el uso de este tipo de
+						algoritmo tendremos una complejidad de \(O\big(n!\big)\) en lugar de \(O\big(2^{n^{2}}\big)\) lo
+						cual es una mejoría tal y como se mostró anteriormente en la gráfica comparativa.
+					</p>
+					<div class="row no-gutters justify-content-center">
+						<figure class="figure col-12 col-lg-5">
+							<img alt="tablero mostrando solución encontrada" class="img-fluid" src=""
+								 th:src="@{/img/4.png}">
+							<figcaption class="figure-caption">Solución encontrada utilizando "vuelta atrás".
+							</figcaption>
+						</figure>
+						<figure class="figure col-12 col-lg-5 p-3">
+							<img alt="animación algoritmo vuelta atrás" class="img-fluid" src="" th:src="@{/img/5.gif}">
+							<figcaption class="figure-caption">
+								Animación de la primera solución encontrada por “vuelta atrás”.
+							</figcaption>
+						</figure>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--/*  Footer fragment  */-->
+		<div th:replace="fragments/elements :: footer"></div>
+	</div>
+</div>
+<!--/*  Go-to-top fragment  */-->
+<div th:replace="fragments/elements :: go-to-top"></div>
+<!--/*  Javascript files  */-->
+<script th:src="@{/js/go-to-top.js}" type="text/javascript"></script>
+</body>
+</html>
